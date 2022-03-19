@@ -1,16 +1,19 @@
+// main.go
 package main
 
 import (
-	"net/http"
-	"github.com/gin-gonic/gin"
+	"github.com/renasami/svelte-go/api/database"
+	"github.com/renasami/svelte-go/api/routes"
+
+	"github.com/gofiber/fiber/v2"
 )
 
 func main() {
-	router := gin.Default()
-	router.GET("/", func(c *gin.Context) {
-		c.JSON(http.StatusOK, gin.H{
-			"message": "Hello World",
-		})
-	})
-	router.Run()
+	// GORMセット
+	database.Connect()
+
+	app := fiber.New()
+	routes.Setup(app)
+
+	app.Listen(":8080")
 }
