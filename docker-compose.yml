@@ -6,7 +6,7 @@ services:
     build: 
       context: ./api
     volumes:
-      - ./api/src:/go/sec
+      - ./api/src:/go/src
     ports: 
       - 8080:8080
     environment:
