@@ -7,12 +7,19 @@ services:
       context: ./api
     volumes:
       - ./api/src:/go/src
+    links: 
+      - smtp
     ports: 
       - 8080:8080
     environment:
       - "GOPATH=/go"
     platform: linux/amd64
 
+  smtp:
+    image: mailhog/mailhog
+    ports:
+      - "1025:1025"
+      - "8025:8025"
   db:
     image: mariadb:latest
     restart: always

@@ -13,9 +13,9 @@ import (
 // }
 
 type User struct {
-	gorm.Model // 追加
-	FirstName  string
-	LastName   string
-	Email      string `gorm:"unique"`
-	Password   []byte
+	gorm.Model
+	FirstName string `json:"first_name"`
+	LastName  string `json:"last_name"`
+	Email     string `json:"email" gorm:"unique"`
+	Password  []byte `json:"-"` // -を指定すると非表示にできる
 }
