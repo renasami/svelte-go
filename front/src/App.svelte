@@ -1,11 +1,23 @@
 <script lang="ts">
-	export let name: string;
+	import { Router, Link, Route } from "svelte-routing";
+	import Home from "./components/pages/Home.svelte"
+	import  Login from "./components/pages/Login.svelte";
+	import  Register from "./components/pages/Register.svelte";
+
 </script>
 
-<main>
-	<h1>Hello {name}!</h1>
-	<p>Visit the <a href="https://svelte.dev/tutorial">Svelte tutorial</a> to learn how to build Svelte apps.</p>
-</main>
+<Router>
+	<nav>
+	  <Link to="/">home</Link>
+	  <Link to="/login">about</Link>
+	  <Link to="/register">about</Link>
+	</nav>
+	<main>
+	  <Route path="" component={Home} />
+	  <Route path="/login" component={Login} />
+	  <Route path="/register" component={Register} />
+	</main>
+</Router>
 
 <style>
 	main {
@@ -15,12 +27,12 @@
 		margin: 0 auto;
 	}
 
-	h1 {
+	/* h1 {
 		color: #ff3e00;
 		text-transform: uppercase;
 		font-size: 4em;
 		font-weight: 100;
-	}
+	} */
 
 	@media (min-width: 640px) {
 		main {
