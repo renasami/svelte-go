@@ -1,11 +1,14 @@
 package controllers
 
 import (
+	"fmt"
 	"math/rand"
+	"net/smtp"
 
 	"github.com/gofiber/fiber/v2"
 	"github.com/renasami/svelte-go/api/database"
 	"github.com/renasami/svelte-go/api/models"
+	"golang.org/x/crypto/bcrypt"
 )
 
 func Forgot(c *fiber.Ctx) error {
@@ -26,7 +29,7 @@ func Forgot(c *fiber.Ctx) error {
 	database.DB.Create(&passwordReset)
 
 	database.DB.Create(&passwordReset)
- 
+
 	// SMTPメール送信
 	from := "selfnote-owner@yahoo.co.jp"
 	to := []string{
@@ -45,11 +48,11 @@ func Forgot(c *fiber.Ctx) error {
 		to,
 		[]byte(sendFrom+subject+mime+message),
 	)
- 
+
 	if err != nil {
 		return err
 	}
- 
+
 	return c.JSON(fiber.Map{
 		"message": "SUCCESS",
 	})
@@ -67,12 +70,12 @@ func RandStringRunes(n int) string {
 
 func Reset(c *fiber.Ctx) error {
 	var data map[string]string
- 
+
 	// リクエストデータをパースする
 	if err := c.BodyParser(&data); err != nil {
 		return err
 	}
- 
+
 	// パスワードチェック
 	if data["password"] != data["password_confirm"] {
 		c.Status(400)
@@ -80,7 +83,7 @@ func Reset(c *fiber.Ctx) error {
 			"message": "Passwords do not match!",
 		})
 	}
- 
+
 	var passwordReset = models.PasswordReset{}
 	// JWT Tokenからデータを取得
 	err := database.DB.Where("token = ?", data["token"]).Last(&passwordReset)
@@ -90,11 +93,11 @@ func Reset(c *fiber.Ctx) error {
 			"message": "Invalid token!",
 		})
 	}
- 
+
 	// パスワードをエンコード
 	password, _ := bcrypt.GenerateFromPassword([]byte(data["password"]), 14)
 	database.DB.Model(&models.User{}).Where("email = ?", passwordReset.Email).Update("password", password)
- 
+
 	return c.JSON(fiber.Map{
 		"message": "SUCCESS",
 	})
