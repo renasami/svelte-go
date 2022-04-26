@@ -12,7 +12,7 @@ var (
 	schema         = "%s:%s@tcp(db:3306)/%s?charset=utf8&parseTime=True&loc=Local"
 	username       = "mariadb"
 	password       = "secret"
-	dbName         = "myjchatapp"
+	dbName         = "auth"
 	datasourceName = fmt.Sprintf(schema, username, password, dbName)
 	// DBインスタンス
 	DB *gorm.DB
